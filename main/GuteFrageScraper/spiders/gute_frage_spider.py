@@ -30,11 +30,16 @@ class GuteFrageSpider(scrapy.Spider):
     # - save next_page as starting point for next scrape
     # - save last date to stop parsing there/ continue after last next_page
     def parse(self, response):
+        self.log(f"\n * Scraping page: {response.url}")
+        next_page = XPath.desc(response).a("TabsPagination-nextLink").href().get()
+        page_data = {
+                "url": response.url,  # save url as potential starting point for later parsing
+                "questions": []
+                }
         for question in XPath.desc(response).node("gf-card-listing-inbox").div().build():
             data = extract_data(question)
             reprocess_text(data)
-            # self.log(data)
-            yield data
+            page_data["questions"].append(data)
+        yield page_data
+        yield response.follow(next_page, self.parse)
 
-        next_page = XPath.desc(response).a("TabsPagination-nextLink").href().get
-        self.log(f"Next Page is: {next_page}")
