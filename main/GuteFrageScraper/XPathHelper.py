@@ -4,7 +4,7 @@ class XPathHelper:
     Example with `response` Object from scrapy, first the normal way, and then using XPathHelper
 
     >>> date = response.xpath("./div[contains(concat(' ',@class,' '),' Class1 ')]//a/@date").get()
-    >>> date = XPathHelper.root(response).div("Class1").skip.a().attribute("date").get()
+    >>> date = XPathHelper.rel_desc(response).div("Class1").skip.a().attribute("date").get()
 
     This Class helps to avoid spelling mistakes and the cumbersome class selection in the cases where 
     the target node has multiple classes but we only want to have on of those classes in the selector
