@@ -7,14 +7,6 @@ cur = conn.cursor()
 # Execute the SQL query
 query = """
 SELECT
-XMLFOREST(title AS "Title", author AS "Author", date AS "Date") AS xml_data
-FROM
-gutefrage
-WHERE
-title ~* '^(Was|Wer|Wie|Wo|Wann|Warum|Welche|Wem|Wessen)\s'
-"""
-query = """
-SELECT
 XMLFOREST(title AS "Title", text AS "Text", author AS "Author", date AS "Date", url AS "URL") AS xml_data
 FROM
 gutefrage
@@ -35,7 +27,7 @@ for row in rows:
 xml_data += '</data>'
 
 # Write the XML data to a file
-with open('./data/output.xml', 'w') as file:
+with open('./data/output.full.xml', 'w') as file:
     file.write(xml_data)
 
 # Close the database connection
