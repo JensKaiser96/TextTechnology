@@ -16,3 +16,4 @@ script to extract xml from database is at `main/query_db.py`
 xml containing the filered question is at `data/output.full.xml`
 xml containing a limited selection of 500 filtered questions is at `data/output.500.xml`
 
+database is at `psql -h bergbussard -d ttws2021 -U ttws2021` using table `gutefrage`
