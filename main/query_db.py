@@ -12,7 +12,15 @@ FROM
 gutefrage
 WHERE
 title ~* '^(Was|Wer|Wie|Wo|Wann|Warum|Welche|Wem|Wessen)\s'
-LIMIT 10
+"""
+query = """
+SELECT
+XMLFOREST(title AS "Title", text AS "Text", author AS "Author", date AS "Date", url AS "URL") AS xml_data
+FROM
+gutefrage
+WHERE
+to_tsvector('simple', title) @@ to_tsquery('simple', 'Was|Wer|Wie|Wo|Wann|Warum|Welche|Wem|Wessen')
+AND NOT to_tsvector('simple', title) @@ to_tsquery('simple', 'Ich|mein|meinen|mir|mich|ihr')
 """
 cur.execute(query)
 
@@ -24,10 +32,10 @@ rows = cur.fetchall()
 xml_data = '<data>\n'
 for row in rows:
     xml_data += '    ' + row[0] + '\n'
-    xml_data += '</data>'
+xml_data += '</data>'
 
 # Write the XML data to a file
-with open('output.xml', 'w') as file:
+with open('./data/output.xml', 'w') as file:
     file.write(xml_data)
 
 # Close the database connection
